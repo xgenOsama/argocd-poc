@@ -1,0 +1,8 @@
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: {{ .Chart.Name }}

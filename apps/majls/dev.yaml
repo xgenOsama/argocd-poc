@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dev-majls
+  namespace: dev-majls
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/xgenOsama/argocd-poc
+    targetRevision: dev
+    path: nginx-app
+
+  destination: 
+    name: dev-majls
+    namespace: dev-majls
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true

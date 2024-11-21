@@ -1,0 +1,21 @@
+server:
+  service:
+    type: NodePort
+configs:
+  rbac:
+    policy.default: role:readonly  # Default role for unauthenticated users
+
+    policy.csv: |
+      g, user1, role:developer    # Map user1 to the developer role
+      g, user2, role:admin        # Map user2 to the admin role
+
+    role.developer: |
+      p, role:developer, applications, get, */*, allow
+      p, role:developer, applications, sync, */*, allow
+      p, role:developer, applications, create, */*, allow
+      p, role:developer, applications, delete, */*, allow
+      p, role:developer, clusters, get, *, allow
+      p, role:developer, repositories, get, *, allow
+
+    role.admin: |
+      p, role:admin, *, *, *, allow

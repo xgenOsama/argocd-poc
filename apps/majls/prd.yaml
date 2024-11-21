@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prd-majls
+  namespace: prd-majls
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/anveshmuppeda/argo-cd-demo
+    targetRevision: prd
+    path: nginx-app
+
+  destination: 
+    name: prd-majls
+    namespace: prd-majls
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true
