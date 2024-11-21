@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: dev-majls
-  namespace: dev-majls
+  namespace: argocd
 spec:
   project: default
 
@@ -12,7 +12,7 @@ spec:
     path: nginx-app
 
   destination: 
-    name: dev-majls
+    server: https://kubernetes.default.svc
     namespace: dev-majls
 
   syncPolicy:

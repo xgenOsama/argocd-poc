@@ -11,7 +11,8 @@ service:
 
 ingress:
   enabled: false
-
+serviceAccount:
+  create: false
 resources: {}
 nodeSelector: {}
 tolerations: []

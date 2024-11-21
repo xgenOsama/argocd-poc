@@ -61,6 +61,7 @@ argocd login <ARGOCD_SERVER> --username user1 --password user1password
 argocd login <ARGOCD_SERVER> --username user2 --password user2password
 
 # you can create apps from ui but here we are using CRD of argocd to create apps
+kubectl create namesapce dev-majls
 kubectl apply -f apps/majls/dev.yaml
 
 helm create nginx-app
