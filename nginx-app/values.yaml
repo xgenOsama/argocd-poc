@@ -13,6 +13,8 @@ ingress:
   enabled: false
 serviceAccount:
   create: false
+autoscaling:
+  enabled: false
 resources: {}
 nodeSelector: {}
 tolerations: []
