@@ -43,3 +43,10 @@ resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+htmlContent: |
+  <html>
+    <head><title>My NGINX Page</title></head>
+    <body>
+      <h1>Welcome to my NGINX server for dev!</h1>
+    </body>
+  </html>

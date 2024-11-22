@@ -15,6 +15,11 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "{{ .Values.htmlContent }}" > /usr/share/nginx/html/index.html
           ports:
             - name: http
               containerPort: 80
