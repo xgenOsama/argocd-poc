@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: prd-majls
-  namespace: prd-majls
+  namespace: argocd
 spec:
   project: default
 
