@@ -38,17 +38,35 @@ kubectl port-forward svc/argocd-demo-server -n argocd 8080:443
 # The default username is admin, and to retrieve the password, use:
 kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath={.data.password} | base64 -d
 # users 
+htpasswd -bnBC 10 "" "password" | tr -d ':\n'
+#output
+$2y$10$zN7Mvi5ObciLiZOpG04F..yFqafw7l8yEHIKdwupxetHh/AiirZwG
 # Create a secret for user1
 kubectl -n argocd create secret generic argocd-user1 \
-  --from-literal=password='user1password' \
+  --from-literal=password='$2y$10$zN7Mvi5ObciLiZOpG04F..yFqafw7l8yEHIKdwupxetHh/AiirZwG' \
   --from-literal=username='user1' \
   --dry-run=client -o yaml | kubectl apply -f -
 
 # Create a secret for user2
 kubectl -n argocd create secret generic argocd-user2 \
-  --from-literal=password='user2password' \
+  --from-literal=password='$2y$10$zN7Mvi5ObciLiZOpG04F..yFqafw7l8yEHIKdwupxetHh/AiirZwG' \
   --from-literal=username='user2' \
   --dry-run=client -o yaml | kubectl apply -f -
+
+#  login 
+
+argocd login localhost:8080
+# add more users 
+kubectl get configmap argocd-cm -n argocd -o yaml > argocd-cm.yml
+# update this in file 
+data:
+  accounts.user1: apiKey, login
+  accounts.user2: apiKey, login
+# then apply it 
+kubectl apply -f argocd-cm.yml 
+argocd account update-password --account user1 --new-password password
+argocd account update-password --account user2 --new-password password
+argocd account update-password --account user3 --new-password password
 
 # Annotate the Secrets for ArgoCD
 kubectl -n argocd label secret argocd-user1 "argocd.argoproj.io/secret-type=account"
@@ -65,7 +83,9 @@ kubectl create namesapce dev-majls
 kubectl apply -f apps/majls/dev.yaml
 
 helm create nginx-app
-
+#create users and acl you can update this yaml with users an groups
+kubectl get configmap argocd-cm -n argocd -o yaml > argocd-cm.ym
+kubectl get configmap argocd-rbac-cm -n argocd -o yaml > argocd-rbac.yml
 # install ingress nginx controller
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update

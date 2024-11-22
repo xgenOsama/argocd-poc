@@ -1,0 +1,41 @@
+apiVersion: v1
+data:
+  policy.csv: |
+    g, user1, role:developer    # Map user1 to the developer role
+    g, user2, role:admin        # Map user2 to the admin role
+    g, user3, role:viewer        # Map user2 to the admin role
+  policy.default: role:readonly
+  policy.matchMode: glob
+  role.admin: p, role:admin, *, *, *, allow
+  role.developer: |
+    p, role:developer, applications, get, */*, allow
+    p, role:developer, applications, sync, */*, allow
+    p, role:developer, applications, create, */*, allow
+    p, role:developer, applications, delete, */*, allow
+    p, role:developer, clusters, get, *, allow
+    p, role:developer, repositories, get, *, allow
+  role.viewer: |
+    p, role:viewer, applications, get, *, allow
+    p, role:viewer, projects, get, *, allow
+    p, role:viewer, clusters, get, *, allow
+    p, role:viewer, repositories, get, *, allow
+    p, role:viewer, logs, get, *, allow
+  scopes: '[groups]'
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: argocd-demo
+    meta.helm.sh/release-namespace: argocd
+  creationTimestamp: "2024-11-21T21:02:34Z"
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: argocd-demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-rbac-cm
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/version: v2.13.1
+    helm.sh/chart: argo-cd-7.7.5
+  name: argocd-rbac-cm
+  namespace: argocd
+  resourceVersion: "96164"
+  uid: c8b30983-f7ff-4037-9cba-cf6974dbfb45
