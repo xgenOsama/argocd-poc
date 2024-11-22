@@ -8,6 +8,7 @@ image:
 service:
   type: ClusterIP
   port: 80
+  name: "nginx-app-service"
 
 ingress:
   enabled: true
