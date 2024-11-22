@@ -38,3 +38,4 @@ resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+htmlContent: "<h1>test env</h1>"
