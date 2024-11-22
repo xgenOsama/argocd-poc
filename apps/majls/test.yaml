@@ -12,7 +12,7 @@ spec:
     path: nginx-app # Path to the Helm chart in your repository
     helm:
       valueFiles:
-        - nginx-app/values_test.yaml
+        - values_test.yaml
   destination: 
     server: https://kubernetes.default.svc
     namespace: test-majls
