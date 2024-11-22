@@ -21,7 +21,7 @@ ingress:
       port:
         number: 80
   hosts:
-    - host: example.com     # The domain you want to use for your service
+    - host: localhost     # The domain you want to use for your service
       paths:
         - path: /               # Path prefix that will be routed to the service
           pathType: Prefix       # Path type (either "Prefix" or "Exact")
