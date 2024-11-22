@@ -10,7 +10,9 @@ spec:
     repoURL: https://github.com/xgenOsama/argocd-poc
     targetRevision: dev
     path: nginx-app
-
+    helm:
+      valueFiles:
+        - nginx-app/values_dev.yaml
   destination: 
     server: https://kubernetes.default.svc
     namespace: dev-majls

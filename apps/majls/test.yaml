@@ -9,8 +9,10 @@ spec:
   source:
     repoURL: https://github.com/xgenOsama/argocd-poc
     targetRevision: test
-    path: nginx-app
-
+    path: nginx-app # Path to the Helm chart in your repository
+    helm:
+      valueFiles:
+        - nginx-app/values_test.yaml
   destination: 
     server: https://kubernetes.default.svc
     namespace: test-majls
