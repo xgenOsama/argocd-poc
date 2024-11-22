@@ -12,7 +12,7 @@ spec:
     path: nginx-app
 
   destination: 
-    name: prd-majls
+    server: https://kubernetes.default.svc
     namespace: prd-majls
 
   syncPolicy:
