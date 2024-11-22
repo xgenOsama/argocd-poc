@@ -140,6 +140,8 @@ If TLS is enabled for the Ingress, a Secret containing the certificate and key m
     tls.key: <base64 encoded key>
   type: kubernetes.io/tls
 
+kubectl port-forward svc/ingress-nginx-controller 8085:80 -n ingress-nginx
+# this is nginx loadbalancer
 # check the status of nginx ingress
 kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
