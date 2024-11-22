@@ -1,0 +1,6 @@
+controller:
+  service: 
+    type: NodePort
+    nodePorts:
+      http: 30081
+      https: 30444

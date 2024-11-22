@@ -90,7 +90,7 @@ kubectl get configmap argocd-rbac-cm -n argocd -o yaml > argocd-rbac.yml
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 kubectl create namespace ingress-nginx
-helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx
+helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx -f nginx-ingress-controller-values.yaml
 # output 
 NAME: ingress-nginx
 LAST DEPLOYED: Fri Nov 22 13:51:22 2024

@@ -10,7 +10,29 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
+  className: nginx             # Optional, specify the ingress class (e.g., "nginx")
+  annotations:                 # Optional annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  default_backend:
+    service:
+      name: nginx-app-service
+      port:
+        number: 80
+  hosts:
+    - host: example.com     # The domain you want to use for your service
+      paths:
+        - path: /               # Path prefix that will be routed to the service
+          pathType: Prefix       # Path type (either "Prefix" or "Exact")
+          backend:
+            service:
+              name: nginx-app-service
+              port:
+                number: 80
+  #tls:
+    #- hosts:
+      #  - your-domain.com       # The domain for which TLS should be applied
+      #secretName: your-tls-secret  # The TLS secret containing the certificate and private key
 serviceAccount:
   create: false
 autoscaling:
