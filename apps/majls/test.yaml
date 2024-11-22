@@ -7,7 +7,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/anveshmuppeda/argo-cd-demo
+    repoURL: https://github.com/xgenOsama/argocd-poc
     targetRevision: test
     path: nginx-app
 
