@@ -12,15 +12,27 @@ spec:
       labels:
         app: nginx-app
     spec:
-      containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      initContainers:
+        - name: init-html
+          image: busybox
           command:
             - /bin/sh
             - -c
             - |
               echo "{{ .Values.htmlContent }}" > /usr/share/nginx/html/index.html
+          volumeMounts:
+            - name: html-volume
+              mountPath: /usr/share/nginx/html
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
+          volumeMounts:
+            - name: html-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: html-volume
+          emptyDir: {}
