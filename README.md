@@ -10,7 +10,7 @@ openssl req -new -key selfsigned.key -out selfsigned.csr -config csr.conf
 openssl x509 -req -days 365 -in selfsigned.csr -signkey selfsigned.key -out selfsigned.crt
 helm install argocd-demo argo/argo-cd --namespace argocd -f argocd-custom-values.yaml
 # create the certificate secret for ingress controller 
-kubectl create secret tls argocd-selfsigned-tls \
+kubectl create secret tls argocd-server-tls \
   --cert=./selfsigned.crt \
   --key=./selfsigned.key \
   -n argocd
