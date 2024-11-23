@@ -4,6 +4,7 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 # Using a Helm Chart
 helm repo add argo https://argoproj.github.io/argo-helm
+helm install argocd-demo argo/argo-cd --namespace argocd -f argocd-custom-values.yaml
 # create certificate for argocd
 openssl genrsa -out selfsigned.key 2048
 openssl req -new -key selfsigned.key -out selfsigned.csr -config csr.conf
