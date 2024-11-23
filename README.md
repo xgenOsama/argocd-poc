@@ -9,12 +9,11 @@ openssl genrsa -out selfsigned.key 2048
 openssl req -new -key selfsigned.key -out selfsigned.csr -config csr.conf
 openssl x509 -req -days 365 -in selfsigned.csr -signkey selfsigned.key -out selfsigned.crt
 helm install argocd-demo argo/argo-cd --namespace argocd -f argocd-custom-values.yaml
-# create the certificate secret for ingress controller 
-kubectl create secret tls argocd-selfsigned-tls \
+# create the certificate secret for ingress controller for argocd
+kubectl create secret tls dev-tls-secret \
   --cert=./selfsigned.crt \
   --key=./selfsigned.key \
   -n argocd
-kubectl get secret argocd-selfsigned-tls -n argocd -o yaml  # check the certificate
 # to update the helm release for argocd
 helm upgrade argocd-demo argo/argo-cd --namespace argocd -f argocd-custom-values.yaml
 
@@ -42,6 +41,22 @@ After reaching the UI the first time you can login with username: admin and the 
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
 (You should delete the initial secret afterwards as suggested by the Getting Started Guide: https://argo-cd.readthedocs.io/en/stable/getting_started/#4-login-using-the-cli)
+
+# create certificate for dev env
+openssl genrsa -out dev.key 2048
+openssl req -new -key dev.key -out dev.csr -config csr_dev.conf
+openssl x509 -req -days 365 -in dev.csr -signkey dev.key -out dev.crt
+# create the certificate secret for ingress controller for dev
+kubectl create secret tls dev-tls-secret \
+  --cert=./dev.crt \
+  --key=./dev.key \
+  -n dev-majls
+
+# check values of helm deployment
+helm template ./nginx-app --name-template dev-majls --namespace dev-majls --kube-version 1.30 --values nginx-app/values_dev.yaml --include-crds --debug
+
+kubectl get secret dev-tls-secret -n dev-majls -o yaml  # check the certificate
+
 # Verify the Installation
 kubectl get pods -n argocd
 # Forward the ArgoCD Server Port
@@ -159,4 +174,6 @@ kubectl get pods -n ingress-nginx
 kubectl get svc -n ingress-nginx
 kubectl get svc ingress-nginx-controller -n ingress-nginx
 
+# check values of helm deployment
+helm template ./nginx-app --name-template dev-majls --namespace dev-majls --kube-version 1.30 --values nginx-app/values_dev.yaml --include-crds --debug
 ```
