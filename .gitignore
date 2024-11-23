@@ -1,1 +1,4 @@
 data/
+selfsigned.crt
+selfsigned.csr
+selfsigned.key

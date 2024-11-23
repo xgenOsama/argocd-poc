@@ -1,40 +1,43 @@
-controller:
-  persistence:
-    enabled: true
-    storageClass: manual
-    type: hostPath
-    path: /Users/n1x/Sure/argocd/data/argocd-controller  # Path on the host system
-    accessMode: ReadWriteOnce
-    size: 8Gi # Set the appropriate size for your deployment
+global:
+  domain: argocd.example.com
 server:
+  certificate:
+    enabled: false ## Let it be false as we will create our own cert
+    secretName: argocd-selfsigned-tls
   service:
     type: NodePort
-  persistence:
-    enabled: true
-    storageClass: manual
-    size: 10Gi
-    type: hostPath
-    path: /Users/n1x/Sure/argocd/data/argocd-server  # Path on the host system
-    accessMode: ReadWriteOnce
   replicas: 1
-repoServer:
-  persistence:
+  ingress:
     enabled: true
-    storageClass: manual
-    type: hostPath
-    path: /Users/n1x/Sure/argocd/data/argocd-repo-server  # Path on the host system
-    size: 10Gi
-    accessMode: ReadWriteOnce
-
-dex:
-  persistence:
-    storageClass: manual
-    enabled: true
-    type: hostPath
-    path: /Users/n1x/Sure/argocd/data/argocd-dex  # Path on the host system
-    size: 10Gi
-    accessMode: ReadWriteOnce
+    ingressClassName: nginx
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    hosts:
+      - host: argocd.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              name: argocd-demo-server
+              port:
+                number: 80
+    tls:
+      - hosts:
+          - argocd.example.com
+        secretName: argocd-selfsigned-tls
+    https: false
 configs:
+  # params:
+  #   server.basehref: https://argocd.example.com
+  #   server.insecure: false
+  cm:
+    url: "https://argocd.example.com:8085"
+  params:
+    server.insecure: "true"
   rbac:
     policy.default: role:readonly  # Default role for unauthenticated users
 
