@@ -4,7 +4,19 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 # Using a Helm Chart
 helm repo add argo https://argoproj.github.io/argo-helm
+# create certificate for argocd
+openssl genrsa -out selfsigned.key 2048
+openssl req -new -key selfsigned.key -out selfsigned.csr -config csr.conf
+openssl x509 -req -days 365 -in selfsigned.csr -signkey selfsigned.key -out selfsigned.crt
 helm install argocd-demo argo/argo-cd --namespace argocd -f argocd-custom-values.yaml
+# create the certificate secret for ingress controller 
+kubectl create secret tls argocd-selfsigned-tls \
+  --cert=./selfsigned.crt \
+  --key=./selfsigned.key \
+  -n argocd
+kubectl get secret argocd-selfsigned-tls -n argocd -o yaml  # check the certificate
+# to update the helm release for argocd
+helm upgrade argocd-demo argo/argo-cd --namespace argocd -f argocd-custom-values.yaml
 
 #output
 NAME: argocd-demo
@@ -16,7 +28,7 @@ TEST SUITE: None
 NOTES:
 In order to access the server UI you have the following options:
 
-1. kubectl port-forward service/argocd-demo-server -n default 8080:443
+1. kubectl port-forward service/argocd-demo-server -n argocd 8080:443
 
     and then open the browser on http://localhost:8080 and accept the certificate
 
