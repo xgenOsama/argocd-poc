@@ -1,0 +1,46 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80
+  name: "nginx-app"
+
+ingress:
+  enabled: true
+  className: nginx             # Optional, specify the ingress class (e.g., "nginx")
+  annotations:                 # Optional annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  default_backend:
+    service:
+      name: nginx-app-service
+      port:
+        number: 80
+  hosts:
+    - host: preprd.example.com     # The domain you want to use for your service
+      paths:
+        - path: /               # Path prefix that will be routed to the service
+          pathType: Prefix       # Path type (either "Prefix" or "Exact")
+          backend:
+            service:
+              name: nginx-app-service
+              port:
+                number: 80
+  tls:
+    - hosts:
+       - preprd.example.com       # The domain for which TLS should be applied
+      secretName: preprd-tls-secret  # The TLS secret containing the certificate and private key
+
+serviceAccount:
+  create: false
+autoscaling:
+  enabled: false
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+htmlContent: "<h1>dev env</h1>"

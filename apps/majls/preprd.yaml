@@ -10,7 +10,9 @@ spec:
     repoURL: https://github.com/xgenOsama/argocd-poc
     targetRevision: preprd
     path: nginx-app
-
+    helm:
+      valueFiles:
+        - values_preprd.yaml
   destination: 
     server: https://kubernetes.default.svc
     namespace: preprd-majls

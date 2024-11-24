@@ -52,6 +52,17 @@ kubectl create secret tls dev-tls-secret \
   --key=./dev.key \
   -n dev-majls
 
+
+  # create certificate for preprd env
+openssl genrsa -out preprd.key 2048
+openssl req -new -key preprd.key -out preprd.csr -config csr_preprd.conf
+openssl x509 -req -days 365 -in preprd.csr -signkey preprd.key -out preprd.crt
+# create the certificate secret for ingress controller for dev
+kubectl create secret tls preprd-tls-secret \
+  --cert=./preprd.crt \
+  --key=./preprd.key \
+  -n preprd-majls
+
 # check values of helm deployment
 helm template ./nginx-app --name-template dev-majls --namespace dev-majls --kube-version 1.30 --values nginx-app/values_dev.yaml --include-crds --debug
 
